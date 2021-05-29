@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +26,7 @@
     }
   </style>
 </head>
+
 <body>
   <fieldset>
     <legend>Error Calculator</legend>
@@ -62,11 +64,121 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      // To trigger error either press calculate with no values to calculate or have the output not equal to 3
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+        if(output.innerHTML != 3) {
+          throw new NotThree('The number 3 should be the output regardless');
+        }
+      } catch (err) {
+        alert(err.name);
+        alert(err.message);
+      } finally {
+        console.log('finally');
+      }
     });
+
+    // Custom Error
+    class NotThree extends Error {
+      constructor(message) {
+        super(message);
+        this.name = 'Custom Error - Expect output to be 3';
+      }
+    }
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+
+    // Console Log Demo
+    errorBtns[0].addEventListener('click', () => {
+      console.log('Console Log Demo');
+    });
+
+    // Console Error Demo
+    errorBtns[1].addEventListener('click', () => {
+      console.error('Console Error Demo');
+    });
+
+    // Console Table
+    errorBtns[6].addEventListener('click', () => {
+      console.table([
+        {
+          first: 'René',
+          last: 'Magritte',
+        },
+        {
+          first: 'Chaim',
+          last: 'Soutine',
+          birthday: '18930113',
+        },
+        {
+          first: 'Henri',
+          last: 'Matisse',
+        }
+      ]);
+    });
+
+    // Console dir
+    errorBtns[2].addEventListener('click', () => {
+      console.dir(errorBtns[2]);
+    });
+
+    // Console dirxml
+    errorBtns[3].addEventListener('click', () => {
+      console.dirxml(document);
+    });
+
+    // Console Group Start
+    errorBtns[4].addEventListener('click', () => {
+      console.group('Log Group');
+    });
+
+    // Console Group End
+    errorBtns[5].addEventListener('click', () => {
+      console.groupEnd('Log Group');
+    });
+
+    // Console Timer Start
+    errorBtns[7].addEventListener('click', () => {
+      console.log('Timer Started!');
+      console.time();
+    });
+
+    // Console Timer End
+    errorBtns[8].addEventListener('click', () => {
+      console.log('Timer Ended!');
+      console.timeEnd();
+    });
+
+    // Console Trace
+    errorBtns[9].addEventListener('click', () => {
+      const deep = () => {
+        deeper();
+      };
+
+      const deeper = () => {
+        deepest();
+      };
+
+       const deepest = () => {
+        console.trace();
+      };
+
+      deep();
+    });
+
+    // Global Error
+    errorBtns[10].addEventListener('click', () => {
+      boom('Uh oh');
+    });
+
+    
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.log('An error has occurred');  
+    };
   </script>
 </body>
+
 </html>
